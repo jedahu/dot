@@ -18,10 +18,10 @@ set autoindent
 set autowrite
 set background=dark
 set backspace=indent,eol,start
-set backupdir=~/.vim-backup//
+set backupdir=~/.vim/bak//
 set completeopt=menuone,menu,longest,preview
 set cursorline
-set directory=~/.vim-backup//
+set directory=~/.vim/swp//
 set expandtab
 set guioptions-=m
 set guioptions-=T
@@ -34,8 +34,6 @@ set list listchars=trail:·,tab:»·,nbsp:⍽
 set mouse=a
 set nocompatible
 set nojoinspaces
-set noswapfile
-set noswapfile
 set shiftwidth=2
 set showcmd
 set showmatch
