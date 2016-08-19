@@ -1,5 +1,8 @@
 super + space
   rofi -show run
 
+super + Tab
+  rofi -show window
+
 super + Return
   urxvtc
