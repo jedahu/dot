@@ -1,3 +1,8 @@
 [user]
 email = jedahu@gmail.com
 name = Jeremy Hughes
+signingkey = 6CA07FA0BC37FD14
+[commit]
+gpgsign = true
+[gpg]
+program = gpg2
