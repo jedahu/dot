@@ -1,5 +1,5 @@
 super + space
-  drun
+  rofi -show run
 
 super + Return
   urxvtc
