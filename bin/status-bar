@@ -1,22 +1,30 @@
-#!/usr/bin/env nix-shell
-#! nix-shell -i /bin/sh -p lemonbar aumix
+#!/usr/bin/env bash
 
-clock() {
+if [[ ! "$IN_NIX_SHELL" ]] && type -P nix-shell >/dev/null
+then
+    exec nix-shell -p lemonbar aumix --run "$0 $*"
+fi
+
+_clock() {
     date '+%Y-%m-%d %H:%M'
 }
 
-volume() {
-    amixer get Master | sed -n '4N;s/^.*\[\([0-9]\+%\).*$/\1/p'
+_volume() {
+    aumix -vq | awk '{printf("%03d", $3)}'
 }
 
-format() {
+_format() {
+    echo "%{r}%{A4:vol-up:}%{A5:vol-down:}%{A1:vol-toggle:}$(_volume)%%{A}%{A}%{A}  $(_clock) "
+}
+
+_tick() {
     while :; do
-        echo "%{r}%{A4:vol-up:}%{A5:vol-down:}$(volume)%{A}%{A}  $(clock) "
+        _format
         sleep 1
     done
 }
 
-parse() {
+_parse() {
     while read cmd
     do
         case "$cmd" in
@@ -26,8 +34,18 @@ parse() {
             vol-down)
                 aumix -v-5
                 ;;
+            vol-toggle)
+                amixer set Master toggle
+                ;;
         esac
+        _format
     done
 }
 
-format | lemonbar -p -B\#113461 -F\#c9c7d4 | parse
+pipe="$XDG_RUNTIME_DIR/status-bar-pipe"
+
+[[ -p "$pipe" ]] || mkfifo "$pipe"
+
+_tick >"$pipe" &
+
+lemonbar -p -B\#113461 -F\#c9c7d4 <"$pipe" | _parse >"$pipe"
