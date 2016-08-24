@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+if [[ ! "$IN_NIX_SHELL" ]] && type -P nix-shell >/dev/null
+then
+    exec nix-shell -p travis --run "$0 $*"
+fi
+
+root="$XDG_RUNTIME_DIR/status"
+
+mkdir -p "$PROJ_STATUS"
+echo -n '' >"$PROJ_STATUS_SUMMARY"
+echo -n '' >"$PROJ_STATUS_DETAIL"
+
+dotbang() {
+    if [[ "$2" = '0' ]]
+    then
+        echo '.' >>"$PROJ_STATUS_SUMMARY"
+        echo ". $1" >>"$PROJ_STATUS_DETAIL"
+    else
+        echo '!' >>"$PROJ_STATUS_SUMMARY"
+        echo "! $1" >>"$PROJ_STATUS_DETAIL"
+    fi
+}
+
+[[ passed = $(travis status -r gettyped/gettyped --no-interactive) ]]
+dotbang ~/proj/gettyped "$?"
+
+sort -o "$PROJ_STATUS_DETAIL" "$PROJ_STATUS_DETAIL"
+
+if [[ 'echo' = "$1" ]]
+then
+    cat "$PROJ_STATUS_DETAIL"
+fi

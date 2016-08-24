@@ -13,7 +13,12 @@ _volume() {
     aumix -vq | awk '{printf("%03d", $3)}'
 }
 
+_status() {
+    [[ -f "$PROJ_STATUS_SUMMARY" ]] && cat "$PROJ_STATUS_SUMMARY"
+}
+
 _format() {
+    echo -n "%{l} %{A1:status:}$(_status)%{A}"
     echo "%{r}%{A4:vol-up:}%{A5:vol-down:}%{A1:vol-toggle:}$(_volume)%%{A}%{A}%{A}  $(_clock) "
 }
 
@@ -37,6 +42,9 @@ _parse() {
             vol-toggle)
                 amixer set Master toggle
                 ;;
+            status)
+                emacsclient -c -n "$PROJ_STATUS_DETAIL"
+                ;;
         esac
         _format
     done
@@ -48,4 +56,4 @@ pipe="$XDG_RUNTIME_DIR/status-bar-pipe"
 
 _tick >"$pipe" &
 
-lemonbar -p -B\#113461 -F\#c9c7d4 <"$pipe" | _parse >"$pipe"
+exec lemonbar -p -B\#113461 -F\#c9c7d4 <"$pipe" | _parse >"$pipe"

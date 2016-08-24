@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 export PATH="${HOME}/nixbin:${PATH}"
 
+export TMPDIR="$XDG_RUNTIME_DIR"
+
+export PROJ_STATUS="$XDG_RUNTIME_DIR/status"
+export PROJ_STATUS_SUMMARY="$PROJ_STATUS/all"
+export PROJ_STATUS_DETAIL="$PROJ_STATUS/detail"
+
 unset SSH_AGENT_PID
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh"
 export GPG_TTY=$(tty)
@@ -25,3 +31,4 @@ alias vim='emacsclient -t'
 alias ll='ls -lh'
 alias la='ls -a'
 alias lla='ls -lha'
+alias nix-env="nix-env -f '$HOME/proj/nixpkgs/'"
