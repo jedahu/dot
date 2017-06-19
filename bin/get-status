@@ -5,29 +5,40 @@ then
     exec nix-shell -p travis --run "$0 $*"
 fi
 
-root="$XDG_RUNTIME_DIR/status"
+summary_tmp="$PROJ_STATUS/summary-tmp"
+detail_tmp="$PROJ_STATUS/detail-tmp"
 
 mkdir -p "$PROJ_STATUS"
-echo -n '' >"$PROJ_STATUS_SUMMARY"
-echo -n '' >"$PROJ_STATUS_DETAIL"
+echo -n '' >"$summary_tmp"
+echo -n '' >"$detail_tmp"
 
 dotbang() {
-    if [[ "$2" = '0' ]]
+    if [[ "$1" = '0' ]]
     then
-        echo '.' >>"$PROJ_STATUS_SUMMARY"
-        echo ". $1" >>"$PROJ_STATUS_DETAIL"
+        echo -n '.' >>"$summary_tmp"
+        echo ". $2 $3" >>"$detail_tmp"
     else
-        echo '!' >>"$PROJ_STATUS_SUMMARY"
-        echo "! $1" >>"$PROJ_STATUS_DETAIL"
+        echo -n '!' >>"$summary_tmp"
+        echo "! $2 $3" >>"$detail_tmp"
     fi
 }
 
-[[ passed = $(travis status -r gettyped/gettyped --no-interactive) ]]
-dotbang ~/proj/gettyped "$?"
+travis_status() {
+    [[ passed = $(travis status -r "$2" --no-interactive) ]]
+    dotbang "$?" "$1" "https://travis-ci.org/$2"
+}
 
-sort -o "$PROJ_STATUS_DETAIL" "$PROJ_STATUS_DETAIL"
+
+travis_status ~/proj/gettyped gettyped/gettyped
+travis_status ~/proj/jedprograms jedahu/jedprograms
+
+
+cp "$summary_tmp" "$PROJ_STATUS_SUMMARY"
+sort <"$detail_tmp" >"$PROJ_STATUS_DETAIL"
 
 if [[ 'echo' = "$1" ]]
 then
+    cat "$PROJ_STATUS_SUMMARY"
+    echo
     cat "$PROJ_STATUS_DETAIL"
 fi

@@ -22,6 +22,7 @@ set backupdir=~/.vim/bak//
 set completeopt=menuone,menu,longest,preview
 set cursorline
 set directory=~/.vim/swp//
+set enc=utf-8
 set expandtab
 set guioptions-=m
 set guioptions-=T
@@ -44,3 +45,7 @@ set tabstop=2
 set ttyfast
 set wildchar=<Tab> wildmenu wildmode=list:longest,full
 syntax on
+
+if has("directx") && $VIM_USE_DIRECTX != '0'
+  set renderoptions=type:directx,geom:1,taamode:1
+endif

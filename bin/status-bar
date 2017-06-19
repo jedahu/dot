@@ -10,7 +10,7 @@ _clock() {
 }
 
 _volume() {
-    aumix -vq | awk '{printf("%03d", $3)}'
+    aumix -vq | tr -d ,| awk '{printf("%03d", $2)}'
 }
 
 _status() {
@@ -19,7 +19,7 @@ _status() {
 
 _format() {
     echo -n "%{l} %{A1:status:}$(_status)%{A}"
-    echo "%{r}%{A4:vol-up:}%{A5:vol-down:}%{A1:vol-toggle:}$(_volume)%%{A}%{A}%{A}  $(_clock) "
+    echo "%{r}%{A4:vol-up:}%{A5:vol-down:}%{A1:vol-toggle:}  $(_volume)%{A}%{A}%{A}  $(_clock) "
 }
 
 _tick() {
