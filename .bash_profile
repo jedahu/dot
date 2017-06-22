@@ -7,3 +7,5 @@ shopt -s globstar
 nix-q() {
     nix-env -qaP --description ".*$1.*"
 }
+
+[ -f ~/.travis/travis.sh ] && . ~/.travis/travis.sh
