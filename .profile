@@ -46,5 +46,4 @@ alias vim='emacsclient -t'
 alias ll='ls -lh'
 alias la='ls -a'
 alias lla='ls -lha'
-alias nix-env="nix-env -f '$HOME/proj/nixpkgs/'"
 alias btc=bluetoothctl
