@@ -67,5 +67,5 @@ super + o ; {0-9}
   bspc desktop -f '{0-9}'
 
 # focus by direction
-super + o ; {h,j,k,l}
-  bspc desktop -f {prev,4,1,next}
+super + o ; {p,n}
+  bspc desktop -f {prev,next}
